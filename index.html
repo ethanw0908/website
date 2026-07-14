@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Rete is a compute-sharing network that connects people who need GPU power with people who have idle hardware. Join the private beta."
+    />
+    <meta name="theme-color" content="#0754d8" />
+    <meta property="og:title" content="Rete — Compute, shared." />
+    <meta
+      property="og:description"
+      content="Access useful GPU capacity or earn from hardware you already own. Join the Rete private beta."
+    />
+    <meta property="og:type" content="website" />
+    <title>Rete — Compute, shared.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" data-header>
+      <a class="wordmark" href="#top" aria-label="Rete home">
+        <span class="wordmark-mark" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </span>
+        <span>Rete</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="#mission">Mission</a>
+        <a href="#network">How it works</a>
+        <a href="#waitlist">Private beta</a>
+      </nav>
+
+      <a class="nav-cta" href="#waitlist" data-role-link="I need compute">
+        Join the network <span aria-hidden="true">↗</span>
+      </a>
+    </header>
+
+    <main id="main">
+      <section class="hero section-shell" id="top">
+        <div class="hero-copy reveal">
+          <p class="eyebrow"><span></span> Private beta applications are open</p>
+          <h1>
+            Put every idle GPU
+            <em>to work.</em>
+          </h1>
+          <p class="hero-lede">
+            Rete connects builders who need dependable compute with people who
+            have hardware sitting unused. More access for one side. More value
+            for the other.
+          </p>
+
+          <div class="hero-actions">
+            <a class="button button-primary" href="#waitlist" data-role-link="I need compute">
+              Get early access <span aria-hidden="true">→</span>
+            </a>
+            <a class="text-link" href="#waitlist" data-role-link="I have compute">
+              Share your compute <span aria-hidden="true">↘</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="network-visual reveal" aria-label="Illustration of a distributed compute network">
+          <div class="network-grid" aria-hidden="true"></div>
+          <div class="node node-a" aria-hidden="true"><span>01</span></div>
+          <div class="node node-b" aria-hidden="true"><span>02</span></div>
+          <div class="node node-c" aria-hidden="true"><span>03</span></div>
+          <div class="node node-core" aria-hidden="true">
+            <div class="chip-lines"></div>
+            <strong>GPU</strong>
+            <small>AVAILABLE</small>
+          </div>
+          <svg class="network-lines" viewBox="0 0 640 640" role="presentation" aria-hidden="true">
+            <path d="M120 160 C220 150, 240 260, 320 320" />
+            <path d="M515 150 C430 180, 410 245, 320 320" />
+            <path d="M495 500 C430 410, 400 390, 320 320" />
+          </svg>
+          <div class="visual-label label-one" aria-hidden="true">VERIFIED NODE</div>
+          <div class="visual-label label-two" aria-hidden="true">ENCRYPTED JOB</div>
+        </div>
+      </section>
+
+      <section class="signal-strip" aria-label="Rete network principles">
+        <div class="signal-track">
+          <span>Share idle capacity</span><i></i>
+          <span>Run AI workloads</span><i></i>
+          <span>Earn from your hardware</span><i></i>
+          <span>Scale without owning a cluster</span><i></i>
+          <span aria-hidden="true">Share idle capacity</span><i aria-hidden="true"></i>
+          <span aria-hidden="true">Run AI workloads</span><i aria-hidden="true"></i>
+        </div>
+      </section>
+
+      <section class="belief section-shell section-rule" id="mission">
+        <p class="section-kicker reveal">Our belief</p>
+        <div class="belief-grid">
+          <h2 class="reveal">
+            Compute should move to where it creates value—not sit unused.
+          </h2>
+          <div class="belief-copy reveal">
+            <p>
+              Powerful GPUs are expensive, scarce, and often idle. At the same
+              time, researchers, developers, and small teams can struggle to
+              access the capacity they need.
+            </p>
+            <p>
+              Rete is building a practical exchange between those two groups:
+              a simple way to request compute, and a controlled way to make
+              spare hardware productive.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="network section-shell section-rule" id="network">
+        <div class="section-heading reveal">
+          <p class="section-kicker">The network</p>
+          <h2>Simple on both sides.</h2>
+          <p>
+            The private beta starts with a focused workflow for AI inference,
+            experimentation, and other GPU-bound jobs.
+          </p>
+        </div>
+
+        <div class="principles">
+          <article class="principle reveal">
+            <div class="principle-number">01</div>
+            <div>
+              <h3>List available hardware.</h3>
+              <p>
+                Providers choose when their machine is available and how much
+                capacity they are comfortable sharing.
+              </p>
+              <span class="meta">For GPU owners · Controlled</span>
+            </div>
+          </article>
+
+          <article class="principle reveal">
+            <div class="principle-number">02</div>
+            <div>
+              <h3>Match the right workload.</h3>
+              <p>
+                Rete routes jobs to suitable machines based on hardware,
+                memory, availability, and workload requirements.
+              </p>
+              <span class="meta">For the network · Efficient</span>
+            </div>
+          </article>
+
+          <article class="principle reveal">
+            <div class="principle-number">03</div>
+            <div>
+              <h3>Use compute on demand.</h3>
+              <p>
+                Builders access distributed GPU capacity without purchasing and
+                maintaining a dedicated cluster first.
+              </p>
+              <span class="meta">For builders · Flexible</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="two-sided section-shell">
+        <article class="side-card side-card-blue reveal">
+          <p class="card-label">I need compute</p>
+          <h2>Build without waiting for your own cluster.</h2>
+          <p>
+            Join the early group of developers, researchers, and teams testing
+            Rete workloads during the private beta.
+          </p>
+          <a href="#waitlist" data-role-link="I need compute">Request access <span>→</span></a>
+          <div class="card-orbit" aria-hidden="true"><i></i><i></i><i></i></div>
+        </article>
+
+        <article class="side-card side-card-light reveal">
+          <p class="card-label">I have compute</p>
+          <h2>Turn unused GPU time into something useful.</h2>
+          <p>
+            Apply as an early provider and help shape the controls, benchmarks,
+            and earnings experience before public launch.
+          </p>
+          <a href="#waitlist" data-role-link="I have compute">Apply as a provider <span>→</span></a>
+          <div class="mini-rack" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </article>
+      </section>
+
+      <section class="waitlist section-shell" id="waitlist">
+        <div class="waitlist-copy reveal">
+          <p class="section-kicker">Private beta</p>
+          <h2>Help build the first version of the network.</h2>
+          <p>
+            Tell us how you plan to use Rete. Early participants will be
+            contacted as testing capacity becomes available.
+          </p>
+        </div>
+
+        <form class="waitlist-form reveal" id="waitlist-form" novalidate>
+          <div class="role-picker" aria-label="Choose how you want to use Rete">
+            <button type="button" class="role-option is-active" data-role="I need compute">
+              <span class="role-icon">↘</span>
+              <span><strong>I need compute</strong><small>Run GPU workloads</small></span>
+            </button>
+            <button type="button" class="role-option" data-role="I have compute">
+              <span class="role-icon">↗</span>
+              <span><strong>I have compute</strong><small>Share idle hardware</small></span>
+            </button>
+          </div>
+
+          <input type="hidden" name="role" id="role" value="I need compute" />
+          <input type="text" name="company_website" class="honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+          <div class="form-row">
+            <label>
+              <span>Name</span>
+              <input type="text" name="name" autocomplete="name" placeholder="Your name" required />
+            </label>
+            <label>
+              <span>Email</span>
+              <input type="email" name="email" autocomplete="email" placeholder="you@company.com" required />
+            </label>
+          </div>
+
+          <label>
+            <span>What would you use Rete for?</span>
+            <textarea
+              name="use_case"
+              rows="3"
+              placeholder="Model inference, fine-tuning, rendering, sharing an RTX 4090…"
+            ></textarea>
+          </label>
+
+          <div class="form-submit-row">
+            <button class="button button-primary" type="submit">
+              <span class="button-label">Join the private beta</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <p class="form-note">No spam. Only product and beta updates.</p>
+          </div>
+
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer section-shell">
+      <a class="wordmark wordmark-footer" href="#top">
+        <span class="wordmark-mark" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </span>
+        <span>Rete</span>
+      </a>
+      <p>Compute, shared.</p>
+      <div>
+        <a href="#mission">Mission</a>
+        <a href="#network">Network</a>
+        <a href="#waitlist">Private beta</a>
+      </div>
+      <small>© <span id="year"></span> Rete AI Development. All rights reserved.</small>
+    </footer>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
