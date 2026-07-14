@@ -6,6 +6,9 @@ const roleLinks = [...document.querySelectorAll("[data-role-link]")];
 const formStatus = document.querySelector("#form-status");
 const submitButton = form?.querySelector('button[type="submit"]');
 const buttonLabel = submitButton?.querySelector(".button-label");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if (!reduceMotion) document.documentElement.style.scrollBehavior = "smooth";
 
 // FormSubmit sends each valid signup to the public contact email associated
 // with this project. The first submission may trigger a one-time activation email.
@@ -44,20 +47,27 @@ window.addEventListener(
   { passive: true },
 );
 
-const revealObserver = new IntersectionObserver(
-  (entries, observer) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add("is-visible");
-      observer.unobserve(entry.target);
-    });
-  },
-  { threshold: 0.12, rootMargin: "0px 0px -40px" },
-);
+const revealElements = [...document.querySelectorAll(".reveal")];
 
-document.querySelectorAll(".reveal").forEach((element) => revealObserver.observe(element));
+if (reduceMotion || !("IntersectionObserver" in window)) {
+  revealElements.forEach((element) => element.classList.add("is-visible"));
+} else {
+  const revealObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.12, rootMargin: "0px 0px -40px" },
+  );
 
-document.querySelector("#year").textContent = new Date().getFullYear();
+  revealElements.forEach((element) => revealObserver.observe(element));
+}
+
+const year = document.querySelector("#year");
+if (year) year.textContent = new Date().getFullYear();
 
 function setStatus(message, type = "") {
   if (!formStatus) return;
