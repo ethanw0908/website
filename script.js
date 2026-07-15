@@ -12,7 +12,7 @@ if (!reduceMotion) document.documentElement.style.scrollBehavior = "smooth";
 
 // FormSubmit sends each valid signup to the public contact email associated
 // with this project. The first submission may trigger a one-time activation email.
-const SIGNUP_ENDPOINT = "https://formsubmit.co/ajax/ew2832@nyu.edu";
+const SIGNUP_ENDPOINT = "https://formsubmit.co/ajax/ethan.wang@nyu.edu";
 
 const roleButtonCopy = {
   "I need compute": "Join the private beta",
@@ -131,7 +131,7 @@ form?.addEventListener("submit", async (event) => {
   } catch (error) {
     console.error(error);
     setStatus(
-      "The signup could not be sent. Please try again in a moment or email ew2832@nyu.edu.",
+      "The signup could not be sent. Please try again in a moment or email ethan.wang@nyu.edu.",
       "error",
     );
   } finally {
