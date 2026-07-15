@@ -10,14 +10,51 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
 
 if (!reduceMotion) document.documentElement.style.scrollBehavior = "smooth";
 
-// FormSubmit sends each valid signup to the public contact email associated
-// with this project. The first submission may trigger a one-time activation email.
-const SIGNUP_ENDPOINT = "https://formsubmit.co/ajax/ethan.wang@nyu.edu";
+// Use FormSubmit's standard browser POST flow so activation, CAPTCHA, and
+// delivery errors are visible instead of being hidden behind an AJAX response.
+const SIGNUP_ENDPOINT = "https://formsubmit.co/ethan.wang@nyu.edu";
 
 const roleButtonCopy = {
   "I need compute": "Join the private beta",
   "I have compute": "Apply as a provider",
 };
+
+function setHiddenField(name, value) {
+  if (!form) return;
+
+  let field = form.querySelector(`input[name="${name}"]`);
+  if (!field) {
+    field = document.createElement("input");
+    field.type = "hidden";
+    field.name = name;
+    form.append(field);
+  }
+
+  field.value = value;
+}
+
+function configureFormSubmit() {
+  if (!form) return;
+
+  form.action = SIGNUP_ENDPOINT;
+  form.method = "POST";
+
+  const honeypot = form.querySelector('[name="company_website"]');
+  if (honeypot) honeypot.name = "_honey";
+
+  const pageUrl = new URL(window.location.href);
+  pageUrl.searchParams.delete("submitted");
+  pageUrl.hash = "";
+
+  const returnUrl = new URL(pageUrl.href);
+  returnUrl.searchParams.set("submitted", "1");
+  returnUrl.hash = "waitlist";
+
+  setHiddenField("_template", "table");
+  setHiddenField("_url", pageUrl.href);
+  setHiddenField("_next", returnUrl.href);
+  setHiddenField("_subject", "New Rete beta signup — I need compute");
+}
 
 function selectRole(role) {
   if (!roleInput || !roleButtonCopy[role]) return;
@@ -29,8 +66,11 @@ function selectRole(role) {
     option.setAttribute("aria-pressed", String(isActive));
   });
 
+  setHiddenField("_subject", `New Rete beta signup — ${role}`);
   if (buttonLabel) buttonLabel.textContent = roleButtonCopy[role];
 }
+
+configureFormSubmit();
 
 roleOptions.forEach((option) => {
   option.setAttribute("aria-pressed", String(option.classList.contains("is-active")));
@@ -98,44 +138,38 @@ form?.querySelectorAll("input, textarea").forEach((field) => {
   field.addEventListener("input", () => field.classList.remove("is-invalid"));
 });
 
-form?.addEventListener("submit", async (event) => {
-  event.preventDefault();
+form?.addEventListener("submit", (event) => {
   setStatus("");
 
-  if (!validateForm()) return;
+  if (!validateForm()) {
+    event.preventDefault();
+    return;
+  }
 
-  const formData = new FormData(form);
-  if (formData.get("company_website")) return;
+  const honeypot = form.querySelector('[name="_honey"]');
+  if (honeypot?.value) {
+    event.preventDefault();
+    return;
+  }
 
-  formData.append("_subject", `New Rete beta signup — ${formData.get("role")}`);
-  formData.append("_template", "table");
-  formData.append("_captcha", "false");
-  formData.delete("company_website");
+  setHiddenField("_subject", `New Rete beta signup — ${roleInput?.value || "I need compute"}`);
 
-  submitButton.disabled = true;
-  const originalLabel = buttonLabel.textContent;
-  buttonLabel.textContent = "Sending…";
+  if (submitButton) submitButton.disabled = true;
+  if (buttonLabel) buttonLabel.textContent = "Continuing…";
+});
 
-  try {
-    const response = await fetch(SIGNUP_ENDPOINT, {
-      method: "POST",
-      headers: { Accept: "application/json" },
-      body: formData,
-    });
+const query = new URLSearchParams(window.location.search);
+if (query.get("submitted") === "1") {
+  setStatus("You’re on the list. We’ll contact you as beta capacity opens.", "success");
 
-    if (!response.ok) throw new Error(`Signup request failed with ${response.status}`);
+  const cleanUrl = new URL(window.location.href);
+  cleanUrl.searchParams.delete("submitted");
+  window.history.replaceState({}, "", `${cleanUrl.pathname}${cleanUrl.search}${cleanUrl.hash}`);
+}
 
-    form.reset();
-    selectRole("I need compute");
-    setStatus("You’re on the list. We’ll contact you as beta capacity opens.", "success");
-  } catch (error) {
-    console.error(error);
-    setStatus(
-      "The signup could not be sent. Please try again in a moment or email ethan.wang@nyu.edu.",
-      "error",
-    );
-  } finally {
-    submitButton.disabled = false;
-    if (!formStatus.classList.contains("is-success")) buttonLabel.textContent = originalLabel;
+window.addEventListener("pageshow", () => {
+  if (submitButton) submitButton.disabled = false;
+  if (buttonLabel && !formStatus?.classList.contains("is-success")) {
+    buttonLabel.textContent = roleButtonCopy[roleInput?.value] || roleButtonCopy["I need compute"];
   }
 });
