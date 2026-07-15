@@ -10,9 +10,10 @@ const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").match
 
 if (!reduceMotion) document.documentElement.style.scrollBehavior = "smooth";
 
-// Use FormSubmit's standard browser POST flow so activation, CAPTCHA, and
-// delivery errors are visible instead of being hidden behind an AJAX response.
-const SIGNUP_ENDPOINT = "https://formsubmit.co/ethan.wang@nyu.edu";
+// FormSubmit's AJAX endpoint delivers the signup without navigating away.
+// The standard endpoint remains configured as a fallback if JavaScript fails.
+const SIGNUP_ENDPOINT = "https://formsubmit.co/ajax/ethan.wang@nyu.edu";
+const SIGNUP_FALLBACK_ENDPOINT = "https://formsubmit.co/ethan.wang@nyu.edu";
 
 const roleButtonCopy = {
   "I need compute": "Join the private beta",
@@ -36,23 +37,14 @@ function setHiddenField(name, value) {
 function configureFormSubmit() {
   if (!form) return;
 
-  form.action = SIGNUP_ENDPOINT;
+  form.action = SIGNUP_FALLBACK_ENDPOINT;
   form.method = "POST";
 
   const honeypot = form.querySelector('[name="company_website"]');
   if (honeypot) honeypot.name = "_honey";
 
-  const pageUrl = new URL(window.location.href);
-  pageUrl.searchParams.delete("submitted");
-  pageUrl.hash = "";
-
-  const returnUrl = new URL(pageUrl.href);
-  returnUrl.searchParams.set("submitted", "1");
-  returnUrl.hash = "waitlist";
-
   setHiddenField("_template", "table");
-  setHiddenField("_url", pageUrl.href);
-  setHiddenField("_next", returnUrl.href);
+  setHiddenField("_url", window.location.href);
   setHiddenField("_subject", "New Rete beta signup — I need compute");
 }
 
@@ -135,41 +127,73 @@ function validateForm() {
 }
 
 form?.querySelectorAll("input, textarea").forEach((field) => {
-  field.addEventListener("input", () => field.classList.remove("is-invalid"));
+  field.addEventListener("input", () => {
+    field.classList.remove("is-invalid");
+
+    if (formStatus?.classList.contains("is-success")) {
+      setStatus("");
+      if (submitButton) submitButton.disabled = false;
+      if (buttonLabel) {
+        buttonLabel.textContent = roleButtonCopy[roleInput?.value] || roleButtonCopy["I need compute"];
+      }
+    }
+  });
 });
 
-form?.addEventListener("submit", (event) => {
+form?.addEventListener("submit", async (event) => {
+  event.preventDefault();
   setStatus("");
 
-  if (!validateForm()) {
-    event.preventDefault();
-    return;
-  }
+  if (!validateForm()) return;
 
-  const honeypot = form.querySelector('[name="_honey"]');
-  if (honeypot?.value) {
-    event.preventDefault();
-    return;
-  }
+  const formData = new FormData(form);
+  if (formData.get("_honey")) return;
 
   setHiddenField("_subject", `New Rete beta signup — ${roleInput?.value || "I need compute"}`);
+  formData.set("_subject", `New Rete beta signup — ${roleInput?.value || "I need compute"}`);
 
   if (submitButton) submitButton.disabled = true;
-  if (buttonLabel) buttonLabel.textContent = "Continuing…";
-});
+  const originalLabel = buttonLabel?.textContent || "Submit";
+  if (buttonLabel) buttonLabel.textContent = "Submitting…";
 
-const query = new URLSearchParams(window.location.search);
-if (query.get("submitted") === "1") {
-  setStatus("You’re on the list. We’ll contact you as beta capacity opens.", "success");
+  let submitted = false;
 
-  const cleanUrl = new URL(window.location.href);
-  cleanUrl.searchParams.delete("submitted");
-  window.history.replaceState({}, "", `${cleanUrl.pathname}${cleanUrl.search}${cleanUrl.hash}`);
-}
+  try {
+    const response = await fetch(SIGNUP_ENDPOINT, {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: formData,
+    });
 
-window.addEventListener("pageshow", () => {
-  if (submitButton) submitButton.disabled = false;
-  if (buttonLabel && !formStatus?.classList.contains("is-success")) {
-    buttonLabel.textContent = roleButtonCopy[roleInput?.value] || roleButtonCopy["I need compute"];
+    const responseText = await response.text();
+    let result = {};
+
+    try {
+      result = responseText ? JSON.parse(responseText) : {};
+    } catch {
+      throw new Error("FormSubmit returned an unreadable response.");
+    }
+
+    const confirmed = result.success === true || String(result.success).toLowerCase() === "true";
+    if (!response.ok || !confirmed) {
+      throw new Error(result.message || `Submission failed with status ${response.status}.`);
+    }
+
+    submitted = true;
+    form.reset();
+    selectRole("I need compute");
+    setStatus("Submitted. We’ll contact you as beta capacity opens.", "success");
+    if (buttonLabel) buttonLabel.textContent = "Submitted";
+  } catch (error) {
+    console.error(error);
+    setStatus(
+      "The signup could not be submitted. Please try again or email ethan.wang@nyu.edu.",
+      "error",
+    );
+  } finally {
+    if (!submitted) {
+      if (submitButton) submitButton.disabled = false;
+      if (buttonLabel) buttonLabel.textContent = originalLabel;
+    }
   }
 });
