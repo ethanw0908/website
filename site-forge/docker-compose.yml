@@ -1,0 +1,15 @@
+services:
+  site-forge:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - /etc/site-forge/site-forge.env
+    ports:
+      - "127.0.0.1:8787:8787"
+    volumes:
+      - site-forge-data:/var/lib/site-forge
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  site-forge-data:
