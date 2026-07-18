@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Create, publish, and deploy a polished website from one prompt." />
+    <title>Site Forge</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Site Forge home">
+        <span class="brand-mark" aria-hidden="true"><span></span></span>
+        <span>Site Forge</span>
+      </a>
+      <div class="topbar-actions">
+        <span id="connectionBadge" class="badge">Checking system</span>
+        <button id="tokenButton" class="text-button" type="button">Access token</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Prompt → repository → production</p>
+        <h1>Describe the website.<br /><span>Codex ships the rest.</span></h1>
+        <p class="hero-copy">A focused website factory that designs, builds, validates, publishes to GitHub, and deploys to Vercel from a single brief.</p>
+      </section>
+
+      <section class="composer" aria-labelledby="composer-title">
+        <div class="composer-head">
+          <div>
+            <p class="section-label">New build</p>
+            <h2 id="composer-title">What should exist?</h2>
+          </div>
+          <button id="advancedToggle" class="text-button" type="button" aria-expanded="false">Advanced</button>
+        </div>
+
+        <form id="buildForm">
+          <label class="sr-only" for="prompt">Website prompt</label>
+          <textarea id="prompt" name="prompt" rows="8" maxlength="12000" placeholder="A cinematic portfolio for an architectural photographer in Vancouver. Quiet typography, full-bleed projects, a restrained monochrome palette, and a simple inquiry form…" required></textarea>
+
+          <div id="advancedPanel" class="advanced-panel" hidden>
+            <label>
+              <span>Repository name <small>optional</small></span>
+              <input id="repoName" name="repoName" autocomplete="off" placeholder="derived-from-prompt" />
+            </label>
+            <label class="switch-row">
+              <span>Private GitHub repository</span>
+              <input id="privateRepository" name="privateRepository" type="checkbox" checked />
+            </label>
+          </div>
+
+          <div class="composer-footer">
+            <p id="formHint">Specific briefs produce stronger art direction.</p>
+            <button id="buildButton" class="primary-button" type="submit">
+              <span>Forge website</span>
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" /></svg>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section id="activeBuild" class="build-panel" hidden aria-live="polite">
+        <div class="build-panel-head">
+          <div>
+            <p class="section-label">Current build</p>
+            <h2 id="buildTitle">Preparing workspace</h2>
+          </div>
+          <span id="buildStatus" class="status-pill">Queued</span>
+        </div>
+        <div class="progress-track" aria-hidden="true"><span id="progressBar"></span></div>
+        <div class="progress-meta"><span id="progressText">0%</span><span id="stageText">Queued</span></div>
+
+        <ol id="timeline" class="timeline"></ol>
+
+        <div id="resultPanel" class="result-panel" hidden>
+          <div class="result-copy">
+            <p class="section-label">Published</p>
+            <h3>Your website is live.</h3>
+            <p>The validated source is on GitHub and the production deployment is running on Vercel.</p>
+          </div>
+          <div class="result-actions">
+            <a id="liveLink" class="primary-button" href="#" target="_blank" rel="noreferrer">Open website</a>
+            <a id="repoLink" class="secondary-button" href="#" target="_blank" rel="noreferrer">View GitHub</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="history-section">
+        <div class="section-heading">
+          <div><p class="section-label">History</p><h2>Recent builds</h2></div>
+          <button id="refreshButton" class="text-button" type="button">Refresh</button>
+        </div>
+        <div id="history" class="history-grid"><p class="empty-state">No builds yet.</p></div>
+      </section>
+    </main>
+
+    <dialog id="tokenDialog">
+      <form method="dialog" class="dialog-card">
+        <div class="dialog-head"><h2>Access token</h2><button value="cancel" class="icon-button" aria-label="Close">×</button></div>
+        <p>This token protects the Linux control service. It is stored only in this browser.</p>
+        <label><span>Token</span><input id="accessToken" type="password" autocomplete="current-password" /></label>
+        <div class="dialog-actions"><button value="cancel" class="secondary-button">Cancel</button><button id="saveToken" value="default" class="primary-button">Save token</button></div>
+      </form>
+    </dialog>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
