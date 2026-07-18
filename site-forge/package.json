@@ -1,0 +1,19 @@
+{
+  "name": "site-forge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Prompt-first website generation, GitHub publishing, and Vercel deployment powered by Codex.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "dev": "NODE_ENV=development node --watch src/server.mjs",
+    "check": "node --check src/server.mjs && node --check public/app.js"
+  },
+  "dependencies": {
+    "@openai/codex": "^0.139.0",
+    "@openai/codex-sdk": "^0.139.0"
+  }
+}
