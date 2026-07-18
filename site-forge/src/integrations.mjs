@@ -83,7 +83,7 @@ export async function deployToVercel({ repo, commit, repoName, job, store }) {
 
   return {
     deployment: `https://${settled.url || deployment.url}`,
-    vercelProject: `https://vercel.com/${config.vercelTeamId || "dashboard"}/${projectName}`,
+    vercelProject: "https://vercel.com/dashboard",
   };
 }
 
@@ -160,7 +160,7 @@ function githubHeaders() {
     Accept: "application/vnd.github+json",
     Authorization: `Bearer ${config.githubToken}`,
     "Content-Type": "application/json",
-    "X-GitHub-Api-Version": "2026-03-10",
+    "X-GitHub-Api-Version": "2022-11-28",
     "User-Agent": "site-forge",
   };
 }
