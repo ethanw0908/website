@@ -1,0 +1,22 @@
+[Unit]
+Description=Site Forge prompt-first website builder
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/site-forge
+EnvironmentFile=/etc/site-forge/site-forge.env
+ExecStart=/usr/bin/node /opt/site-forge/src/server.mjs
+Restart=on-failure
+RestartSec=5
+User=siteforge
+Group=siteforge
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/site-forge
+
+[Install]
+WantedBy=multi-user.target
